@@ -1,11 +1,20 @@
 package com.myProject.myProject.models;
 
+import java.util.HashSet;
+import java.util.Set;
+
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
 
 @Entity
 @Table(name = "users",
@@ -19,22 +28,26 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    
+
     private String email;
 
-    private String firstname;
-
-    private String lastname;
-
     private String password;
+
+@ManyToMany(fetch = FetchType.EAGER)
+@JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name="role_id"))
+    private Set<Roles> roles =new HashSet<>();
 
     public User(){
 
     }
 
-    public User (String email, String firstname, String lastname, String password) {
+    public User (String email, String password) {
+      
+      
         this.email = email;
-        this.firstname = firstname;
-        this.lastname = lastname;
         this.password = password;
 }
 
@@ -57,13 +70,7 @@ public void setEmail(String email) {
     this.email = email;
 }
 
-public String getLastName(){
-    return lastname;
-}
 
-public void setLastName(String lastname) {
-    this.lastname= lastname;
-}
 
 public String getPassword() {
     return password;
@@ -72,13 +79,16 @@ public String getPassword() {
     this.password = password;
  }
 
- public String getFirstname() {
-    return firstname;
- }
+ 
 
- public void setFirstname(String firstname){
-    this.firstname= firstname;
- }
+ public Set<Roles> getRoles() {
+    return roles;
+}
+
+public void setRoles(Set<Roles> roles) {
+    this.roles = roles;
+}
+
 }
 
 
